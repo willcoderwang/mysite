@@ -5,7 +5,17 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super(PublishedManager, self).get_queryset().filter(status='published')
+
+
 class Post(models.Model):
+    # If you declare any managers for you model but you want to keep the objects manager as well, you have to add it
+    # explicitly to your model.
+    objects = models.Manager()      # The default manager
+    published = PublishedManager()      # Our custom manager
+
     STATUS_CHOICES = (
         ('draft', 'Draft'),
         ('published', 'Published'),
