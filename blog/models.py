@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 # Create your models here.
 
@@ -39,3 +40,17 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        """
+        A canonical URL is the preferred URL for a resource.
+        You man have different pages in your site where you display posts,
+        but there is a single URL that you use as the main URL for a blog post.
+        The convention in Django is to add a get_absolute_url() method to the model
+        that returns the canonical URL for the object.
+        """
+        return reverse('blog:post_detail',
+                       args=[self.publish.year,
+                             self.publish.month,
+                             self.publish.day,
+                             self.slug])
